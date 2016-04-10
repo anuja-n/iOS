@@ -2,9 +2,6 @@
 //  Tab3ViewController.m
 //  SampleApp
 //
-//  Created by Saurabh on 09/04/16.
-//  Copyright © 2016 Extentia Information Technology. All rights reserved.
-//
 
 #import "Tab3ViewController.h"
 
@@ -21,30 +18,46 @@
 
 @implementation Tab3ViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    imageArray = [[NSArray alloc]initWithObjects:@"image1",@"image2",@"image3", nil];
-    [imageScrollView setBackgroundColor:[UIColor blackColor]];
-    [imageScrollView setCanCancelContentTouches:NO];
+#pragma mark - View Lifecycle methods
 
-//    imageScrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+- (void)viewDidLoad {
+
+    [super viewDidLoad];
+
+    // Initialize array with 3 static image names.
+    imageArray = [[NSArray alloc]initWithObjects:@"image1",@"image2",@"image3", nil];
+
+    [imageScrollView setCanCancelContentTouches:NO];
     imageScrollView.clipsToBounds = NO;
     imageScrollView.scrollEnabled = YES;
     imageScrollView.pagingEnabled = YES;
-    [textview setDataDetectorTypes:UIDataDetectorTypeAll];
-//    [textview setDataDetectorTypes:UIDataDetectorTypePhoneNumber];
 
     [self addImagesToScrollview];
+
+    [textview setDataDetectorTypes:UIDataDetectorTypeAll];
     [self addDoneToolBarToKeyboard:textview];
     // Do any additional setup after loading the view.
 }
 
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Class Methods
+
+/*!
+ @method     addImagesToScrollview
+ @abstract   This method adds static images to scrollview and sets contentsize
+             of scrollview accordingly.
+ @params     nil
+ */
 - (void)addImagesToScrollview {
 
     NSUInteger count;
     CGFloat xOrigin = 0;
     for (count=0;count <3; count++) {
-//        NSString *imageName = [NSString stringWithFormat:@"image%lu.jpg", (nimages + 1)];
+
         UIImage *image = [UIImage imageNamed:[imageArray objectAtIndex:count]];
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
 
@@ -61,11 +74,15 @@
 
     }
     pageControl.numberOfPages = [imageArray count];
-
     [imageScrollView setContentSize:CGSizeMake(xOrigin, [imageScrollView bounds].size.height)];
 
-
 }
+
+/*!
+ @method     addDoneToolBarToKeyboard
+ @abstract   This method adds Toolbar with Done button to keyboard.
+ @params     (UITextView *)textView
+ */
 -(void)addDoneToolBarToKeyboard:(UITextView *)textView
 {
     UIToolbar* doneToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
@@ -77,27 +94,20 @@
     [doneToolbar sizeToFit];
     textView.inputAccessoryView = doneToolbar;
 }
+
+/*!
+ @method     doneButtonClickedDismissKeyboard
+ @abstract   This method dismisses keyboard when tapped on done button of
+            toolbar and also when tapped outside of textview
+ @params     nil
+ */
 -(void)doneButtonClickedDismissKeyboard
 {
     [textview endEditing:YES];
     [textview resignFirstResponder];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
+# pragma mark- IBAction methods
 - (IBAction)pageChanged:(id)sender {
 
 //    NSLog(@"***pAGE CHANGED");
@@ -107,11 +117,14 @@
 
 
 }
+
+# pragma mark - Gesture recognizer methods
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [textview endEditing:YES];
     [textview resignFirstResponder];
 }
 
+# pragma mark - ScrollViewDelegate methods.
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 
 //    NSLog(@"***DID SCROLL");
